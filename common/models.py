@@ -105,6 +105,13 @@ class Jobs(models.Model):
 
 
 class AppliedJobs(models.Model):
+	STATUS_S=(
+		('NA','NA'),
+		('in_process','in_process'),
+		('selected','selected'),
+		('failed','failed')
+	)
 	user=models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True )
 	job=models.ForeignKey(Jobs,on_delete=models.CASCADE, null=True, blank=True )
 	result=models.CharField(max_length=255, null=True, blank=True )
+	status=models.CharField(max_length=255, choices=STATUS_S, default='NA' )

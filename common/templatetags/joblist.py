@@ -1,6 +1,6 @@
 from django import template
 register = template.Library()
-from ..models import AppliedJobs, Jobs
+from ..models import AppliedJobs, Jobs, StudentDetails
 
 @register.simple_tag
 def check_apply(job, user):
@@ -46,3 +46,13 @@ def apply_count_filter(data_dict, filter):
 def all_jobs_count():
     job_list= Jobs.objects.all().count()
     return job_list
+
+@register.simple_tag
+def get_profile(user):
+    print(user)
+    try:
+        profile= StudentDetails.objects.get(user=user)
+        return profile
+    except:
+        return None
+    

@@ -1,0 +1,73 @@
+{% extends "starter.html" %}
+{% load static %}
+{% load joblist %}
+{% block content %}
+  <section class="table-list">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-widght">
+               
+                <div class="d-flex align-items-center">
+                  <h4 class="header-title mb-0">Application list</h4>
+                 
+                 </div>
+                 <div class="search">
+                  <a href="">
+                    Seleced
+                  </a>
+                  <a href="">
+                    Applied
+                  </a>
+                  
+                </div>
+              </div>
+              
+              <div id="cardCollpase4" class="collapse show">
+                <div class="table-responsive pt-3">
+                  <table class="table table-centered table-nowrap table-borderless mb-0 table-hover">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Full Name</th>
+                        <th>Contact</th>
+                        <th>CGPA</th>
+                        <th>Company</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for job in job_list %}
+                    {% get_profile job.user as profile %}
+                    {% check_apply job request.user as job_data_list %}
+                      <tr>
+                        <td>{{job.user.full_name}}</td>
+                        <td>{{job.user.contact_number}}</td>
+                         <td>{{profile.cgpa}}</td>
+                        <td>
+                          {{job.job.company}}
+                        </td>
+                        
+                        <td>{{job.status}}</td>
+                        <td>
+                        {% if job_data_list|check_apply_filter:'apply_result' == False %}
+                        <a target="_blank" href=""><i class="fa-regular fa-hand-pointer"></i></a>
+                        {% endif %}
+                        <a target="_blank" href=""><i class="fa-solid fa-eye"></i></a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

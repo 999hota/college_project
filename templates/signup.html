@@ -19,18 +19,13 @@
    <center>
 
     <div class="login_div">
-        <form action="" method="POST">
-            {% include 'message.html' %}
-            {% csrf_token %}
-
-            <input name="email" type="email" placeholder="Enter your email" required class="form-control"/>
-            <br>
-            <input name="password" type="password" placeholder="Enter your Password" required class="form-control"/>
-            <br>
-            <button class="btn btn-success" type="submit">Submit</button>
-            <br>
-            <br>
-            <a href="{% url 'common:student_register' %}"><p>Sign up</p></a>
+        <form action="" method="POST" enctype="multipart/form-data">
+          {% include 'message.html'%}
+          {% csrf_token %}
+  
+          {{form.as_p}}
+          <br>
+          <button class="btn btn-success" type="submit">Submit</button>
     
         </form>
     </div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views import View
 
-from django.contrib.auth.models import auth
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -10,24 +10,56 @@ from django.contrib import messages
 from .models import User, Jobs, AppliedJobs
 from django.contrib.auth import authenticate
 from .forms import *
+
+def login_validate(**kwargs):
+    
+    if 'username' in kwargs:
+        try:
+            user = User.objects.get(username= kwargs['username'])
+        except:
+            return None
+        
+        if user.check_password(kwargs['password']):
+            return user
+        else:
+            return None
+    
+    elif 'email' in kwargs:
+        try:
+            user = User.objects.get(email= kwargs['email'])
+        except:
+            return None
+        
+        if user.check_password(kwargs['password']):
+            return user
+        else:
+            return None
+    
+    else:
+        return None
+        
 class Login(View):
     template = 'login.html'
     model = User
     def get(self, request):
-        data = User.objects.all()
-        print(data)
         return render(request, self.template)
 
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user=User.objects.get(email=email)
+        #user=User.objects.get(email=email)
+        print(request.POST)
+        user = login_validate(email=email, password=password)
         print(user)
         if user:
-            auth.login(request,user)
-            return redirect('common:std_dash')
+            login(request, user)
+            if not user.is_staff==True:
+                return redirect('common:std_dash')
+            else:
+                return redirect('common:admin_dash')
         else:
+            messages.error(request, 'Login Failed')
             return redirect('common:login')
 
 
@@ -41,15 +73,6 @@ class StudentDashboard(View):
         }
         return render(request, self.template, context)
 
-    def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user=auth.authenticate(email=email, password=password)
-        if user:
-            auth.login(request,user)
-            pass
-        else:
-            pass
 
 
 class JobApply(View):
@@ -81,4 +104,16 @@ class JobDetails(View):
             'form':self.form_class(instance=job)
         }
         return render(request, self.template, context)
+
+class AdminDashboard(View):
+    template= 'admin/admin_dashboard.html'
+
+    def get(self, request):
+
+        job_list= AppliedJobs.objects.all().order_by('-id')
+        context= {
+            'job_list':job_list
+        }
+        return render(request, self.template, context)
+
         

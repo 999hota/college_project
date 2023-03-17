@@ -34,6 +34,7 @@ class StudentResgister(View):
         if user_form.is_valid():
             user_obj= user_form.save(commit= False)
             user_obj.password= password
+            user_obj.is_active= True
             user_obj.save()
         else:
             messages.error(request, user_form.errors)

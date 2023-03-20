@@ -30,7 +30,7 @@ class MyAccountManager(BaseUserManager):
 		user.is_superuser = True
 		user.save(using=self._db)
 		return user
-
+ 
 
 class User(AbstractBaseUser, PermissionsMixin):
 	# user field
@@ -103,14 +103,14 @@ class Jobs(models.Model):
 	def __str__(self):
 		return self.title
 
-
-class AppliedJobs(models.Model):
-	STATUS_S=(
+STATUS_S=(
 		('NA','NA'),
 		('in_process','in_process'),
 		('selected','selected'),
 		('failed','failed')
 	)
+class AppliedJobs(models.Model):
+	
 	user=models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True )
 	job=models.ForeignKey(Jobs,on_delete=models.CASCADE, null=True, blank=True )
 	result=models.CharField(max_length=255, null=True, blank=True )

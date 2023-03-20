@@ -12,19 +12,16 @@
               <div class="card-widght">
                
                 <div class="d-flex align-items-center">
-                  <h4 class="header-title mb-0">Job list</h4>
+                  <h4 class="header-title mb-0">Applied Student List</h4>
                  
                  </div>
                  <div class="search">
-                  <a>
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#create_job">Create-Job</button>
-                  </a>
-                  <a href="">
-                    Seleced
-                  </a>
-                  <a href="">
-                    Applied
-                  </a>
+                    {% for status in status_list %}
+                        <a href="{% url 'common:applied_student_list' %}?job_id={{job_id}}&filter={{status}}">
+                            {{status}}
+                        </a>
+                    {% endfor %}
+
                   
                 </div>
               </div>
@@ -34,26 +31,27 @@
                   <table class="table table-centered table-nowrap table-borderless mb-0 table-hover">
                     <thead class="table-light">
                       <tr>
-                        <th>Job ID</th>
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Opening</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Student Id</th>
+                        <th>Name</th>
+                        <th>CGPA</th>
+                        <th>10th Marks</th>
+                        <th>12th Marks</th>
+                        <th>status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                    {% for job in job_list %}
+                    {% for job in applied_job_list %}
+                    {% get_profile job.user as profile %}
                       <tr>
-                        <td>{{job.id}}</td>
-                        <td>{{job.title}}</td>
-                        <td>{{job.company}}</td>
-                        <td>{{job.openings}}</td>
-                         <td>{{job.start_date}}</td>
-                         <td>{{job.end_date}}</td>
+                        <td>{{profile.id}}</td>
+                        <td>{{job.user.full_name}}</td>
+                        <td>{{profile.cgpa}}</td>
+                        <td>{{profile.tenth_marks}}</td>
+                        <td>{{profile.twelveth_marks}}</td>
+                        <td>{{job.status}}</td>
                         <td>
-                          <a target="_blank" href="{% url 'common:applied_student_list' %}?job_id={{job.id}}"><i class="fa-solid fa-eye"></i></a>
+                          <a data-bs-toggle="modal" data-bs-target="#aj{{job.id}}"><i class="fa-solid fa-eye"></i></a>
                         </td>
                       </tr>
 
@@ -69,6 +67,7 @@
       </div>
     </div>
   </section>
+
 
 
 {% endblock content %}

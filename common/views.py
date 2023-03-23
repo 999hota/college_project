@@ -107,13 +107,67 @@ class JobDetails(View):
 
 class AdminDashboard(View):
     template= 'admin/admin_dashboard.html'
+    form = JobsForm
+    model= Jobs
 
     def get(self, request):
 
-        job_list= AppliedJobs.objects.all().order_by('-id')
+        job_list= Jobs.objects.all().order_by('-id')
         context= {
-            'job_list':job_list
+            'job_list':job_list,
+            'form':self.form
         }
         return render(request, self.template, context)
 
+class CreateJob(View):
+    model= Jobs
+    form_class= JobsForm
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'New job is addded.....')
+        else:
+            messages.error(request, form.errors)
+
+        return redirect('common:admin_dash')
+
+
+
+from .models import STATUS_S
+class GetAppliedStudentList(View):
+    model= AppliedJobs
+    template= 'admin/applied_student_list.html'
+
+    def get(self, request):
+        job_id= request.GET.get('job_id')
         
+        if 'filter' in request.GET.dict():
+            applied_job_list= self.model.objects.filter(job__id=job_id, status= request.GET.get('filter'))
+        else:
+            applied_job_list= self.model.objects.filter(job__id=job_id)
+
+
+        context={
+            "applied_job_list": applied_job_list,
+            'status_list': [data[0] for data in STATUS_S],
+            'job_id':job_id
+        }
+
+        
+        return render(request, self.template, context)
+
+class ChageAppliedJobStatus(View):
+    model= AppliedJobs
+
+    def get(self, request):
+        redirect_to = request.META.get('HTTP_REFERER')
+        print(redirect_to)
+        aj_id= request.GET.get('aj_id')
+        status= request.GET.get('status')
+        
+        applied_job= self.model.objects.get(id=aj_id)
+        applied_job.status= status
+        applied_job.save()
+        messages.success(request, "Status is changed.....")
+        return redirect(redirect_to)

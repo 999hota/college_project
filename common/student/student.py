@@ -27,7 +27,7 @@ class StudentResgister(View):
     @transaction.atomic
     def post(self,request):
         
-        #--------------- creating user
+        #--------------- creating user ----------------------
         password= make_password(request.POST.get('password'))
 
         user_form= SignupForm(request.POST)

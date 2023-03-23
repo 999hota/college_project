@@ -1,0 +1,52 @@
+
+
+<div class="modal fade" id="aj{{job.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{user.full_name}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-4">
+                    cgpa: {{profile.cgpa}}
+                </div>
+                <div class="col-4">
+                    10th marks : {{profile.tenth_marks}}
+                </div>
+                <div class="col-4">
+                    12th marks : {{profile.twelveth_marks}}
+                </div>
+
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-4">
+                    DOB: {{profile.dob}}
+                </div>
+                <div class="col-4">
+                    skills : {{profile.skills}}
+                </div>
+                <div class="col-4">
+                    coding_langs : {{profile.coding_langs}}
+                </div>
+
+            </div>
+            <hr>
+            <div class="row">
+                <h4>Selet status</h4>
+                {% for status in status_list %}
+                    <div class="col-3">
+                        <a href="{% url 'common:chage_applied_job_status' %}?aj_id={{job.id}}&status={{status}}"><button class="btn btn-primary" type="button">{{status}}</button></a>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            
+        </div>
+  
+      </div>
+    </div>
+  </div>

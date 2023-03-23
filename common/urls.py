@@ -16,4 +16,7 @@ urlpatterns = [
     path('apply_job/<str:job_id>', JobApply.as_view(), name="apply_job"),
 
     path('admin_dash',AdminDashboard.as_view(), name="admin_dash"),
+    path('create_job', CreateJob.as_view(), name='create_job'),
+    path('applied_student_list', GetAppliedStudentList.as_view(), name='applied_student_list'),
+    path('chage_applied_job_status', ChageAppliedJobStatus.as_view(), name='chage_applied_job_status'),
 ]

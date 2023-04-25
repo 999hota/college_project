@@ -20,7 +20,7 @@
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#create_job">Create-Job</button>
                   </a>
                   <a href="">
-                    Seleced
+                    Selected
                   </a>
                   <a href="">
                     Applied
@@ -57,7 +57,7 @@
                         </td>
                       </tr>
 
-                      {% include 'admin/student_detail_modal.html' %}
+                      
                     {% endfor %}
                     </tbody>
                   </table>
@@ -70,7 +70,26 @@
     </div>
   </section>
 
+<div class="modal fade" id="create_job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Post New Job</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method='post' action='{% url "common:create_job" %}'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <br>
+        <center>
+        <button class='btn btn-success' type='submit'>create job</button>
+        </center>
+        </form>
+      </div>
 
+    </div>
+  </div>
+</div>
 {% endblock content %}
-
-student_detail_modal.html

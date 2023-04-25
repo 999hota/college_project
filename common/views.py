@@ -112,7 +112,7 @@ class AdminDashboard(View):
 
     def get(self, request):
 
-        job_list= Jobs.objects.all().order_by('-id')
+        job_list= Jobs.objects.all().order_by('id')
         context= {
             'job_list':job_list,
             'form':self.form

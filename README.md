@@ -2,7 +2,7 @@ open folder where env and pms_project is located
 
 env/Scripts/activate
 
-cd pms_project
+cd pms
 
 python manage.py runserver
 #to open the project

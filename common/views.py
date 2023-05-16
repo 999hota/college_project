@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, reverse
+from django.utils.http import urlencode
 from django.views import View
 
 from django.contrib.auth import authenticate, login
@@ -6,10 +7,13 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
 
 from .models import User, Jobs, AppliedJobs
 from django.contrib.auth import authenticate
 from .forms import *
+from helpers import utils
 
 def login_validate(**kwargs):
     
@@ -44,23 +48,66 @@ class Login(View):
     def get(self, request):
         return render(request, self.template)
 
+
+
+    def send_otp(self, email, otp):
+        subject = 'welcome to CMS'
+        message = f'Hi {email}, welcome back. Please use this otp : {otp} for login...'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [email, ]
+        send_mail( subject, message, email_from, recipient_list )
+
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        #user=User.objects.get(email=email)
-        print(request.POST)
         user = login_validate(email=email, password=password)
-        print(user)
         if user:
+
+            # ---------------------
+            otp = utils.unique_number(4)
+            user.otp = otp
+            user.save()
+            self.send_otp(email, otp)
+            # ---------------------
+            return redirect(
+                reverse("common:otp_verification")+'?'+urlencode({"email":email})
+            )
+        else:
+            messages.error(request, 'Login Failed')
+            return redirect('common:login')
+
+class OtpVerification(View):
+    model = User
+    template = "otp.html"
+    def get(self, request):
+        email= request.GET.get("email")
+        context = {
+            "email":email
+        }
+        messages.info(request, f"A 4-digit otp has been sent to {email}.")
+        return render(request, self.template, context)
+        
+    def post(self, request):
+        email = request.POST.get("email")
+        otp= request.POST.get("otp")
+
+        try:
+            user = self.model.objects.get(email=email, otp = otp)
             login(request, user)
             if not user.is_staff==True:
                 return redirect('common:std_dash')
             else:
                 return redirect('common:admin_dash')
-        else:
-            messages.error(request, 'Login Failed')
-            return redirect('common:login')
+        except:
+            messages.error(request, "Otp verification failed....")
+
+from django.contrib.auth import logout      
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, "Logout successfully.....")
+        return redirect("common:login")
+        
 
 
 class StudentDashboard(View):

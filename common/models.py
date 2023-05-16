@@ -43,6 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	is_staff = models.BooleanField(default=False)
 	created_on = models.DateField(auto_now_add=True)
 	is_active = models.BooleanField(default=True)
+	otp = models.CharField(max_length=255, null=True, blank=True)
 
 	contact_number = models.CharField(max_length=10, null=True)
 	USERNAME_FIELD = "username"	

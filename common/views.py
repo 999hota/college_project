@@ -84,6 +84,7 @@ class OtpVerification(View):
         context = {
             "email":email
         }
+        messages.info(request, f"A 4-digit otp has been sent to {email}.")
         return render(request, self.template, context)
         
     def post(self, request):
@@ -100,40 +101,13 @@ class OtpVerification(View):
         except:
             messages.error(request, "Otp verification failed....")
 
-
-
-class ForgotPassword(View):
-    template = 'login.html'
-    model = User
+from django.contrib.auth import logout      
+class Logout(View):
     def get(self, request):
-        return render(request, self.template)
-
-    def send_otp(self, email, otp):
-        subject = 'welcome to CMS'
-        message = f'Hi {email}, welcome back. Please use this otp : {otp} for login...'
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [email, ]
-        send_mail( subject, message, email_from, recipient_list )
-
-    def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = login_validate(email=email, password=password)
-        if user:
-
-            # ---------------------
-            otp = utils.unique_number(4)
-            user.otp = otp
-            user.save()
-            self.send_otp(email, otp)
-            # ---------------------
-            return redirect(
-                reverse("common:otp_verification")+'?'+urlencode({"email":email})
-            )
-        else:
-            messages.error(request, 'Login Failed')
-            return redirect('common:login')
-
+        logout(request)
+        messages.success(request, "Logout successfully.....")
+        return redirect("common:login")
+        
 
 
 class StudentDashboard(View):

@@ -1,42 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sign Up Form by Colorlib</title>
 
-    <title>Login</title>.
-    <style>
-        .login_div{
-            width: 23%;
-        }
-    </style>
-  </head>
-  <body>
-   <center>
+  <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <div class="login_div">
-        <form action="" method="POST" enctype="multipart/form-data">
-          {% include 'message.html'%}
-          {% csrf_token %}
-  
-          {{form.as_p}}
-          <br>
-          <button class="btn btn-success" type="submit">Submit</button>
-    
-        </form>
+  <link rel="stylesheet" href="https://colorlib.com/etc/regform/colorlib-regform-15/css/style.css">
+  <meta name="robots" content="noindex, follow">
+  <script nonce="76be597a-07d4-445d-a776-b4937e610d0e">
+    (function (w, d) {
+      ! function (bg, bh, bi, bj) {
+        bg[bi] = bg[bi] || {};
+        bg[bi].executed = [];
+        bg.zaraz = {
+          deferred: [],
+          listeners: []
+        };
+        bg.zaraz.q = [];
+        bg.zaraz._f = function (bk) {
+          return function () {
+            var bl = Array.prototype.slice.call(arguments);
+            bg.zaraz.q.push({
+              m: bk,
+              a: bl
+            })
+          }
+        };
+        for (const bm of ["track", "set", "debug"]) bg.zaraz[bm] = bg.zaraz._f(bm);
+        bg.zaraz.init = () => {
+          var bn = bh.getElementsByTagName(bj)[0],
+            bo = bh.createElement(bj),
+            bp = bh.getElementsByTagName("title")[0];
+          bp && (bg[bi].t = bh.getElementsByTagName("title")[0].text);
+          bg[bi].x = Math.random();
+          bg[bi].w = bg.screen.width;
+          bg[bi].h = bg.screen.height;
+          bg[bi].j = bg.innerHeight;
+          bg[bi].e = bg.innerWidth;
+          bg[bi].l = bg.location.href;
+          bg[bi].r = bh.referrer;
+          bg[bi].k = bg.screen.colorDepth;
+          bg[bi].n = bh.characterSet;
+          bg[bi].o = (new Date).getTimezoneOffset();
+          if (bg.dataLayer)
+            for (const bt of Object.entries(Object.entries(dataLayer).reduce(((bu, bv) => ({
+                ...bu[1],
+                ...bv[1]
+              }))))) zaraz.set(bt[0], bt[1], {
+              scope: "page"
+            });
+          bg[bi].q = [];
+          for (; bg.zaraz.q.length;) {
+            const bw = bg.zaraz.q.shift();
+            bg[bi].q.push(bw)
+          }
+          bo.defer = !0;
+          for (const bx of [localStorage, sessionStorage]) Object.keys(bx || {}).filter((bz => bz.startsWith(
+            "_zaraz_"))).forEach((by => {
+            try {
+              bg[bi]["z_" + by.slice(7)] = JSON.parse(bx.getItem(by))
+            } catch {
+              bg[bi]["z_" + by.slice(7)] = bx.getItem(by)
+            }
+          }));
+          bo.referrerPolicy = "origin";
+          bo.src = "/cdn-cgi/zaraz/s.js?z=" + btoa(encodeURIComponent(JSON.stringify(bg[bi])));
+          bn.parentNode.insertBefore(bo, bn)
+        };
+        ["complete", "interactive"].includes(bh.readyState) ? zaraz.init() : bg.addEventListener("DOMContentLoaded",
+          zaraz.init)
+      }(w, d, "zarazData", "script");
+    })(window, document);
+  </script>
+</head>
+
+<body>
+  <div class="main">
+    <div class="container">
+      <div class="signup-content">
+        <div class="signup-img">
+          <img src="https://colorlib.com/etc/regform/colorlib-regform-15/images/signup-img.jpg" alt="">
+        </div>
+        <div class="signup-form">
+          <form action="" method="post" class="register-form" id="register-form" enctype="multipart/form-data">
+            {% include 'message.html' %}
+            {% csrf_token %}
+            <h2>student registration form</h2>
+
+            <div class="row">
+
+              {% for fields in form %}
+              <div class="col-6 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label for="name">{{fields.label}} :</label>
+                  {{fields}}
+                </div>
+              </div>
+              {% endfor %}
+
+
+            </div>
+
+            <div class="form-submit">
+              <a href="">
+                <input type="button" value="Reset All" class="submit" name="reset" id="reset" />
+              </a>
+              <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" />
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 
-   </center>
+  <script src="https://colorlib.com/etc/regform/colorlib-regform-15/vendor/jquery/jquery.min.js"></script>
+  <script src="https://colorlib.com/etc/regform/colorlib-regform-15/js/main.js"></script>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-    <!-- Optional JavaScript; choose one of the two! -->
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    gtag('config', 'UA-23581568-13');
+  </script>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v52afc6f149f6479b8c77fa569edb01181681764108816"
+    integrity="sha512-jGCTpDpBAYDGNYR5ztKt4BQPGef1P0giN6ZGVUi835kFF88FOmmn8jBQWNgrNd8g/Yu421NdgWhwQoaOPFflDw=="
+    data-cf-beacon='{"rayId":"7c855e0b48507a0d","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2023.4.0","si":100}'
+    crossorigin="anonymous"></script>
+</body>
 
-  </body>
 </html>

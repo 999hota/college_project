@@ -8,6 +8,7 @@ from .student import student
 app_name="common"
 urlpatterns = [
     path('', Login.as_view(), name='login'),
+    path('logout', Logout.as_view(), name="logout"),
     path("otp_verification", OtpVerification.as_view(), name="otp_verification"),
     path('student_register', student.StudentResgister.as_view(), name='student_register'),
     path('std_dash', StudentDashboard.as_view(), name='std_dash'),

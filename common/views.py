@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
-
+from django.contrib.auth import logout      
 from .models import User, Jobs, AppliedJobs
 from django.contrib.auth import authenticate
 from .forms import *
@@ -62,7 +62,8 @@ class Login(View):
         password = request.POST.get('password')
         user = login_validate(email=email, password=password)
         if user:
-
+            if user.is_superuser:
+                return redirect('common:admin_dash')
             # ---------------------
             otp = utils.unique_number(4)
             user.otp = otp
@@ -100,8 +101,11 @@ class OtpVerification(View):
                 return redirect('common:admin_dash')
         except:
             messages.error(request, "Otp verification failed....")
+            return redirect(
+                reverse("common:otp_verification")+'?'+urlencode({"email":email})
+            )
 
-from django.contrib.auth import logout      
+
 class Logout(View):
     def get(self, request):
         logout(request)
